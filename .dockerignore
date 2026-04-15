@@ -1,0 +1,40 @@
+# Git & CI
+.git
+.github
+.gitignore
+
+# Local configuration (runtime uses image/env, not host .env)
+.env
+.env.*
+!.env.example
+
+# Documentation & tests (not needed to compile the binary)
+README.md
+*.md
+tests/
+**/testdata/
+
+# Coverage & reports
+coverage.out
+coverage.html
+*.coverprofile
+
+# Editors
+.vscode
+.idea
+*.swp
+
+# Dev-only compose and scripts
+docker-compose.yml
+docker-compose.*.yml
+tests/testing.docker-compose.yml
+tools/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Temp & logs
+tmp
+temp
+*.log

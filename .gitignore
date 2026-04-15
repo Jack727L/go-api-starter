@@ -1,34 +1,74 @@
-# Secrets
+# ─── Secrets & local env ──────────────────────────────────────────────────────
 .env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
 
-# Compiled binaries
-app
+# ─── Go build artifacts ───────────────────────────────────────────────────────
 *.exe
+*.exe~
 *.dll
 *.so
 *.dylib
 *.test
 *.out
+app
+debug
+main
 
-# Go workspace
+# ─── Go workspace ─────────────────────────────────────────────────────────────
 go.work
 go.work.sum
 
-# OS
-.DS_Store
-Thumbs.db
+# ─── Vendoring (uncomment if you never commit vendor/) ───────────────────────
+vendor/
 
-# IDEs
-.idea/
-.vscode/
-*.swp
-
-# Python (if any tooling scripts)
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-
-# Test coverage
+# ─── Coverage & profiling ─────────────────────────────────────────────────────
 coverage.out
 coverage.html
+coverage.xml
+*.coverprofile
+cpu.prof
+mem.prof
+*.pprof
+
+# ─── Test & fuzz artifacts ──────────────────────────────────────────────────────
+testdata/fuzz/**/crashers/
+testdata/fuzz/**/suppressions/
+
+# ─── Caches & temp (includes Air live-reload output) ───────────────────────────
+.cache/
+tmp/
+temp/
+*.tmp
+*.log
+build-errors.log
+
+# ─── OS ─────────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ─── Editors & IDEs ─────────────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# ─── Python (optional tooling scripts) ────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.Python
+
+# ─── Node (if you add frontend/tooling later) ─────────────────────────────────
+node_modules/
