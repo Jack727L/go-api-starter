@@ -1,130 +1,246 @@
+<div align="center">
+
 # Go Fiber backend template
 
-A small, production-minded REST API template using [Fiber](https://gofiber.io/), PostgreSQL with [sqlc](https://sqlc.dev/), Redis-backed async jobs, [Sqitch](https://sqitch.org/) migrations, and [testcontainers](https://testcontainers.com/) for tests.
+**REST API starter** — [Fiber](https://gofiber.io/), PostgreSQL + [sqlc](https://sqlc.dev/), [Sqitch](https://sqitch.org/), Redis jobs, Swagger, [testcontainers](https://testcontainers.com/).
+
+<br/>
+
+[![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev/)
+[![Fiber](https://img.shields.io/badge/Fiber-v2-6366f1?style=for-the-badge)](https://gofiber.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+
+<br/><br/>
+
+[Features](#features) · [Quick start](#quick-start) · [Makefile](#makefile) · [Tools](#tools) · [API](#api-overview) · [Testing](#testing) · [Docker](#docker-image) · [Layout](#project-layout)
+
+</div>
+
+<br/>
+
+---
 
 ## Features
 
-- **HTTP**: Fiber with CORS, request logging, and validation ([go-playground/validator](https://github.com/go-playground/validator)).
-- **Auth**: Register, login, refresh, logout; JWT-style flows with typed handlers under `/auth`.
-- **Users**: Authenticated `/users/me` CRUD-style profile routes.
-- **Data**: `pgx` connection pool, SQL defined in `db/queries/`, generated Go in `db/sqlc/`.
-- **Jobs**: Redis client and job executor (`core/jobs/`) for background-style work.
-- **Ops**: `/healthz`, `/healthcheck`, `/readyz` (readiness includes DB ping).
-- **Docs**: Swagger annotations; generated files live under `docs/`.
+| Area | What you get |
+| :--- | :--- |
+| **HTTP** | Fiber, CORS, logging, validation ([validator](https://github.com/go-playground/validator)) |
+| **Auth** | Register, login, refresh, logout under `/auth` |
+| **Users** | Bearer-protected `/users/me` profile routes |
+| **Data** | `pgx` pool · SQL in `db/queries/` · generated code in `db/sqlc/` |
+| **Jobs** | Redis + executor in `core/jobs/` |
+| **Ops** | `/healthz`, `/healthcheck`, `/readyz` (readiness checks DB) |
+| **Docs** | Swagger annotations → `docs/` |
+
+---
 
 ## Requirements
 
-| Tool | Notes |
-|------|--------|
-| **Go** | 1.24+ (see `go.mod`). |
-| **Docker** | For local Postgres/Redis (`docker compose`) and for tests (testcontainers). |
-| **Sqitch** | Apply DB migrations from `db/sqitch` before first run. |
-| **Optional** | `sqlc` (regenerate DB code), `swag` (regenerate OpenAPI), `reflex` (`make watch`). |
+| Need | Notes |
+| :--- | :--- |
+| **Go** | 1.24+ (`go.mod`) |
+| **Docker** | Local Postgres/Redis via Compose · testcontainers for tests |
+| **Sqitch** | Run migrations from `db/sqitch` before first boot |
+| **Optional** | `sqlc`, `swag`, `reflex` (`make watch`) |
+
+---
 
 ## Quick start
 
-1. **Clone and configure environment**
+### 1 · Environment
 
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+cp .env.example .env
+```
 
-   Edit `.env` if your ports or credentials differ from the defaults.
+Edit `.env` if ports or credentials differ from the defaults.
 
-2. **Start Postgres and Redis**
+### 2 · Postgres & Redis
 
-   ```bash
-   docker compose up -d
-   ```
+```bash
+docker compose up -d
+```
 
-3. **Run migrations**
+Defaults: Postgres **5432**, Redis **6379**.
 
-   From the repository root, deploy with a URI that matches `.env` (user, password, host, port, database):
+### 3 · Migrations
 
-   ```bash
-   cd db/sqitch
-   sqitch deploy "db:pg://appuser:apppassword@localhost:5432/appdb"
-   cd ../..
-   ```
+From the repository root, use a URI that matches `.env`:
 
-4. **Run the API**
+```bash
+cd db/sqitch
+sqitch deploy "db:pg://appuser:apppassword@localhost:5432/appdb"
+cd ../..
+```
 
-   ```bash
-   go run .
-   ```
+### 4 · Run the API
 
-   The server listens on **`:3000`**. Set `BACKEND_ENV` via `.env` (e.g. `local-dev`).
+```bash
+go run .
+```
+
+Listens on **`:3000`**. Set `BACKEND_ENV` in `.env` (for example `local-dev`).
+
+---
 
 ## Makefile
 
-| Target | Purpose |
-|--------|---------|
-| `make build` | Build binary to `/tmp/go-fiber-template`. |
-| `make run` | Build and run that binary. |
-| `make watch` | Rebuild on `.go` changes (requires [`reflex`](https://github.com/cespare/reflex)). |
-| `make test` | Run `./tools/runTests.sh` (Docker required). |
-| `make test-verbose` | Same with `-v`. |
-| `make docs` | Regenerate Swagger via `./tools/generateDocs.sh` (requires `swag`). |
-| `make sqlc` | Regenerate `db/sqlc/` via `./tools/generateSQLC.sh` (requires `sqlc`). |
+| Target | What it does |
+| :--- | :--- |
+| `make build` | Binary → `/tmp/go-fiber-template` |
+| `make run` | Build + run |
+| `make watch` | Rebuild on `.go` changes · needs [`reflex`](https://github.com/cespare/reflex) |
+| `make test` | `./tools/runTests.sh` (Docker required) |
+| `make test-verbose` | Same with `-v` |
+| `make docs` | Swagger via `./tools/generateDocs.sh` · needs `swag` |
+| `make sqlc` | Regenerate `db/sqlc/` · needs `sqlc` |
+
+---
+
+## Tools
+
+Scripts live in [`tools/`](tools/). Run them from the **repository root**.
+
+| Script | Role | Makefile |
+| :--- | :--- | :--- |
+| [`generateDocs.sh`](tools/generateDocs.sh) | Swagger / OpenAPI from handler comments | `make docs` |
+| [`generateSQLC.sh`](tools/generateSQLC.sh) | Typed Go DB code from SQL | `make sqlc` |
+| [`runTests.sh`](tools/runTests.sh) | Integration tests (Docker) | `make test` · `make test-verbose` |
+
+### `generateDocs.sh`
+
+Regenerates **`docs/`** (e.g. `swagger.json`, `swagger.yaml`, `docs.go`) from Swag annotations in Go source. Run after you change route handlers or doc comments.
+
+```bash
+./tools/generateDocs.sh
+```
+
+**Requires** [swag](https://github.com/swaggo/swag):
+
+```bash
+go install github.com/swaggo/swag/cmd/swag@latest
+```
+
+**Runs:** `swag init --parseDependency --parseInternal`
+
+---
+
+### `generateSQLC.sh`
+
+Regenerates **`db/sqlc/`** from `sqlc.yaml`, SQL in **`db/queries/`**, and schema files under **`db/sqitch/deploy/`**. Run after any change to queries or deploy SQL.
+
+```bash
+./tools/generateSQLC.sh
+```
+
+**Requires** [sqlc](https://docs.sqlc.dev/en/latest/overview/install.html) on your `PATH`.
+
+**Runs:** `sqlc generate` (project root; uses `sqlc.yaml`).
+
+---
+
+### `runTests.sh`
+
+Runs **`go test ./tests/...`** with `BACKEND_ENV=test` and the right Docker wiring. **Do not** call `go test` directly for these suites—the script sets up containers and env.
+
+```bash
+./tools/runTests.sh                    # default: testcontainers (Postgres per run)
+./tools/runTests.sh -v                 # verbose test output
+./tools/runTests.sh -t TestUserTestSuite   # -run filter (specific suite / test)
+./tools/runTests.sh --async            # Compose stack + Redis (see tests/testing.docker-compose.yml)
+./tools/runTests.sh --async --temp     # same, then tear down Compose volumes
+```
+
+**Requires:** Docker daemon. **`--async`** also needs **Sqitch** (runs `sqitch deploy` in `db/sqitch`) and uses `tests/testing.docker-compose.yml`.
+
+Extra `go test` flags can be passed through (see script for full parsing).
+
+---
+
+### Live reload (`make watch`)
+
+Not a script under `tools/`—**`make watch`** uses [`reflex`](https://github.com/cespare/reflex) to rebuild when `.go` files change. Install reflex, then:
+
+```bash
+make watch
+```
+
+---
 
 ## API overview
 
 | Area | Routes |
-|------|--------|
-| Auth | `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout` |
-| Users | `GET/PUT/DELETE /users/me` (Bearer auth) |
-| Health | `GET /healthz`, `GET /healthcheck`, `GET /readyz` |
+| :--- | :--- |
+| **Auth** | `POST /auth/register` · `POST /auth/login` · `POST /auth/refresh` · `POST /auth/logout` |
+| **Users** | `GET` · `PUT` · `DELETE` `/users/me` (Bearer) |
+| **Health** | `GET /healthz` · `GET /healthcheck` · `GET /readyz` |
 
-OpenAPI/Swagger output is generated into `docs/`; regenerate after changing handler annotations.
+Regenerate OpenAPI under `docs/` after changing handler annotations.
+
+---
 
 ## Testing
 
-Tests assume a running Docker daemon. Do **not** run `go test` alone for integration-style suites; use the provided script so containers and env are set correctly:
+Use **`tools/runTests.sh`** — see the [Tools](#tools) section for every flag and prerequisite. Short version:
 
 ```bash
-./tools/runTests.sh              # default: isolated Postgres per run (testcontainers)
-./tools/runTests.sh -v           # verbose
-./tools/runTests.sh -t TestName # filter
-./tools/runTests.sh --async      # uses Compose + Redis (see `tests/testing.docker-compose.yml`)
+./tools/runTests.sh                # default
+./tools/runTests.sh -v
+./tools/runTests.sh -t TestName
+./tools/runTests.sh --async
 ```
 
-Async mode can run Sqitch against the test database; ensure `sqitch` is installed when using `--async`.
+Requires a running **Docker** daemon; **`--async`** needs **Sqitch** as well.
+
+---
 
 ## Docker image
 
-Build a minimal image (multi-stage, distroless runtime):
+Multi-stage build, distroless runtime:
 
 ```bash
 docker build -t go-fiber-template .
 ```
 
-The compose file can be extended with an `app` service (commented example in `docker-compose.yml`).
+Uncomment the sample `app` service in `docker-compose.yml` to run the API in Compose.
+
+---
 
 ## Project layout
 
 ```
-├── core/           # Shared errors, job execution, Redis
+├── core/           # Errors, jobs, Redis
 ├── db/
-│   ├── queries/    # SQL for sqlc
-│   ├── sqlc/       # Generated + connection helpers (generated — do not hand-edit)
-│   └── sqitch/     # Migration plan and deploy scripts
+│   ├── queries/    # SQL (sqlc input)
+│   ├── sqlc/       # Generated — do not edit by hand
+│   └── sqitch/     # Migrations
 ├── docs/           # Swagger (generated)
-├── env/            # Small env submodule for configuration helpers
+├── env/            # Env helpers (submodule)
 ├── middlewares/
 ├── routers/
 ├── services/
-├── setup/          # Fiber setup, routes, health checks
+├── setup/          # App wiring & health routes
 ├── tests/
-├── tools/          # generateDocs, generateSQLC, runTests
+├── tools/          # generateDocs.sh, generateSQLC.sh, runTests.sh
 ├── main.go
 ├── Dockerfile
 └── docker-compose.yml
 ```
 
-## Customizing the module path
+---
 
-Replace the placeholder module `github.com/yourusername/go-fiber-template` in `go.mod`, imports, and Swagger host metadata with your own module path, then run `go mod tidy`.
+## Customizing
+
+Replace the placeholder module `github.com/yourusername/go-fiber-template` in `go.mod`, imports, and Swagger metadata, then:
+
+```bash
+go mod tidy
+```
+
+---
 
 ## License
 
-Add a `LICENSE` file for your project if you distribute this template.
+Add a `LICENSE` file when you ship or fork this template.
