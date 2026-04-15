@@ -1,0 +1,310 @@
+basePath: /
+definitions:
+  models.AuthResponse:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        description: seconds until access token expires
+        type: integer
+      refresh_token:
+        type: string
+    type: object
+  models.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.RefreshRequest:
+    properties:
+      refresh_token:
+        type: string
+    required:
+    - refresh_token
+    type: object
+  models.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        maxLength: 255
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.UpdateUserRequest:
+    properties:
+      name:
+        maxLength: 255
+        type: string
+    type: object
+  models.UserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: A plug-and-play Go REST API using Fiber, PostgreSQL (SQLC), Redis async
+    jobs, and testcontainers.
+  title: Go Fiber Template API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates with email + password and returns access + refresh
+        tokens
+      parameters:
+      - description: Login payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      description: Invalidates the current session token
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Logout
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Uses a valid refresh token to obtain a new access + refresh token
+        pair
+      parameters:
+      - description: Refresh payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Refresh token
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a user account and returns access + refresh tokens
+      parameters:
+      - description: Register payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a new user
+      tags:
+      - auth
+  /users/me:
+    delete:
+      description: Permanently deletes the authenticated user account
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete current user
+      tags:
+      - users
+    get:
+      description: Returns the profile of the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get current user
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Updates the name of the authenticated user
+      parameters:
+      - description: Update payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update current user
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    description: Enter the token with the `Bearer ` prefix, e.g. "Bearer abcde12345"
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

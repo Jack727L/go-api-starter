@@ -8,7 +8,8 @@ CREATE TABLE users (
     name             TEXT,
     hashed_password  TEXT    NOT NULL,
     created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    updated_at       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_active_at   TIMESTAMPTZ
 );
 
 CREATE INDEX idx_users_email ON users(email);
