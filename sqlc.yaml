@@ -1,0 +1,13 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: "db/queries/*.sql"
+    schema:
+      - "db/sqitch/deploy/create_users.sql"
+      - "db/sqitch/deploy/create_user_tokens.sql"
+    gen:
+      go:
+        package: "db"
+        sql_package: "pgx/v5"
+        out: "db/sqlc"
+        emit_json_tags: true

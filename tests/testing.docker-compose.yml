@@ -1,0 +1,32 @@
+version: "3.9"
+
+# Used by `./tools/runTests.sh --async`
+# Mirrors local docker-compose but with test credentials and mapped ports.
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: app_test_postgres
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpassword
+      POSTGRES_DB: testdb
+    ports:
+      - "31415:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser -d testdb"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: app_test_redis
+    command: redis-server --requirepass testredis
+    ports:
+      - "31416:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "testredis", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
