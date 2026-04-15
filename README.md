@@ -1,6 +1,6 @@
 <div align="center">
 
-# YOUR_REPO_NAME
+# Go API Starter
 
 **REST API starter** — [Fiber](https://gofiber.io/), PostgreSQL + [sqlc](https://sqlc.dev/), [Sqitch](https://sqitch.org/), Redis jobs, Swagger, [testcontainers](https://testcontainers.com/).
 
@@ -286,7 +286,6 @@ go mod tidy
 | :--- | :--- |
 | `YOUR_BINARY_NAME` | `Makefile` (`BINARY_NAME`) · default output `/tmp/YOUR_BINARY_NAME` |
 | `YOUR_IMAGE_NAME` | README Docker example · `docker build -t …` |
-| `YOUR_REPO_NAME` | README title |
 | `YOUR_SQITCH_PROJECT` | `db/sqitch/sqitch.plan` (`%project`) · first line of each file under `db/sqitch/deploy/`, `revert/`, `verify/` (must stay consistent) |
 | `YOUR_NAME` / `your.email@example.com` | Author lines in `db/sqitch/sqitch.plan` (new migrations should use your identity) |
 
