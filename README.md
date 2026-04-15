@@ -2,6 +2,8 @@
 
 # Go API Starter
 
+**Branch `development` —** module path **`github.com/Jack727L/go-api-starter`** (author’s working copy). The public template with replaceable placeholders is on **`main`**.
+
 **REST API starter** — [Fiber](https://gofiber.io/), PostgreSQL + [sqlc](https://sqlc.dev/), [Sqitch](https://sqitch.org/), Redis jobs, Swagger, [testcontainers](https://testcontainers.com/).
 
 <br/>
@@ -55,7 +57,7 @@
 cp .env.example .env
 ```
 
-Edit `.env` if ports or credentials differ from the defaults.
+Edit `.env` for Postgres/Redis URLs and secrets. **`BACKEND_ENV` is optional:** if unset, the app defaults to **`local-dev`** (you do not need to define it just to run locally).
 
 ### 2 · Postgres & Redis
 
@@ -81,7 +83,7 @@ cd ../..
 go run .
 ```
 
-Listens on **`:3000`**. Set `BACKEND_ENV` in `.env` (for example `local-dev`).
+Listens on **`:3000`**. Override `BACKEND_ENV` in `.env` when you need something other than the default **`local-dev`**.
 
 ---
 
@@ -89,7 +91,7 @@ Listens on **`:3000`**. Set `BACKEND_ENV` in `.env` (for example `local-dev`).
 
 | Target | What it does |
 | :--- | :--- |
-| `make build` | Binary → `/tmp/$(BINARY_NAME)` (default **`YOUR_BINARY_NAME`** in `Makefile`) |
+| `make build` | Binary → `/tmp/go-api-starter` |
 | `make run` | Build + run |
 | `make watch` | Rebuild on `.go` changes · needs [`reflex`](https://github.com/cespare/reflex) |
 | `make test` | `./tools/runTests.sh` (Docker required) |
@@ -203,7 +205,7 @@ Requires a running **Docker** daemon; **`--async`** needs **Sqitch** as well.
 Multi-stage build, distroless runtime:
 
 ```bash
-docker build -t YOUR_IMAGE_NAME .
+docker build -t go-api-starter .
 ```
 
 Uncomment the sample `app` service in `docker-compose.yml` to run the API in Compose.
@@ -276,20 +278,14 @@ The app exposes **`GET /healthz`** and **`GET /readyz`** (readiness includes a D
 
 ## Customizing
 
-**Go module (required for a fork)** — replace **`github.com/yourusername/go-api-starter`** in `go.mod`, `env/go.mod`, every Go import, and the **`%uri`** line in `db/sqitch/sqitch.plan`. Regenerate Swagger if you change doc comments in `main.go` (`make docs`). Then:
+This branch is pinned to **`github.com/Jack727L/go-api-starter`**. To publish a reusable template, use **`main`**, which uses placeholder paths and Sqitch metadata you can search-replace when forking.
+
+After you change packages or Swagger comments:
 
 ```bash
 go mod tidy
+make docs   # if you edited Swag annotations in main.go
 ```
-
-**Other placeholders (optional, for naming)** — search and replace to taste:
-
-| Placeholder | Where |
-| :--- | :--- |
-| `YOUR_BINARY_NAME` | `Makefile` (`BINARY_NAME`) · default output `/tmp/YOUR_BINARY_NAME` |
-| `YOUR_IMAGE_NAME` | README Docker example · `docker build -t …` |
-| `YOUR_SQITCH_PROJECT` | `db/sqitch/sqitch.plan` (`%project`) · first line of each file under `db/sqitch/deploy/`, `revert/`, `verify/` (must stay consistent) |
-| `YOUR_NAME` / `your.email@example.com` | Author lines in `db/sqitch/sqitch.plan` (new migrations should use your identity) |
 
 ---
 

@@ -1,11 +1,8 @@
-# Local binary name (replace YOUR_BINARY_NAME when you fork).
-BINARY_NAME ?= YOUR_BINARY_NAME
-
 build:
-	go build -o /tmp/$(BINARY_NAME) main.go
+	go build -o /tmp/go-api-starter main.go
 
 run: build
-	/tmp/$(BINARY_NAME)
+	/tmp/go-api-starter
 
 watch:
 	reflex -s -r '\.go$$' make run

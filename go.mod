@@ -1,11 +1,12 @@
-module github.com/yourusername/go-api-starter
+module github.com/Jack727L/go-api-starter
 
 go 1.26.2
 
 // Local sub-modules
-replace github.com/yourusername/go-api-starter/env => ./env
+replace github.com/Jack727L/go-api-starter/env => ./env
 
 require (
+	github.com/Jack727L/go-api-starter/env v0.0.0-00010101000000-000000000000
 	github.com/go-playground/validator/v10 v10.18.0
 	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/jackc/pgx/v5 v5.5.4
@@ -15,7 +16,6 @@ require (
 	github.com/swaggo/swag v1.16.6
 	github.com/testcontainers/testcontainers-go v0.34.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.34.0
-	github.com/yourusername/go-api-starter/env v0.0.0-00010101000000-000000000000
 	golang.org/x/crypto v0.38.0
 )
 

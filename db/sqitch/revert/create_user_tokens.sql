@@ -1,4 +1,4 @@
--- Revert YOUR_SQITCH_PROJECT:create_user_tokens from pg
+-- Revert go-api-starter:create_user_tokens from pg
 
 BEGIN;
 

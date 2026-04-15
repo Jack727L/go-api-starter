@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	db "github.com/yourusername/go-api-starter/db/sqlc"
-	"github.com/yourusername/go-api-starter/env"
+	db "github.com/Jack727L/go-api-starter/db/sqlc"
+	"github.com/Jack727L/go-api-starter/env"
 )
 
 // SmartExecutor transparently switches between synchronous (test mode) and

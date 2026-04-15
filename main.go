@@ -1,6 +1,6 @@
 package main
 
-import "github.com/yourusername/go-api-starter/setup"
+import "github.com/Jack727L/go-api-starter/setup"
 
 // @title           Go API Starter
 // @version         1.0

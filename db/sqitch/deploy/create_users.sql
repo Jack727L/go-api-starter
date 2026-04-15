@@ -1,4 +1,4 @@
--- Deploy YOUR_SQITCH_PROJECT:create_users to pg
+-- Deploy go-api-starter:create_users to pg
 
 BEGIN;
 

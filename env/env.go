@@ -29,9 +29,14 @@ func IsAsyncMode() bool {
 	return os.Getenv("ASYNC_MODE") == "true"
 }
 
+// GetApplicationEnv returns BACKEND_ENV after loading .env. If BACKEND_ENV is unset, it defaults to
+// local-dev so you can run without a .env file; set BACKEND_ENV explicitly in staging/prod.
 func GetApplicationEnv() AppEnvironment {
 	_ = godotenv.Load()
 	envValue := os.Getenv("BACKEND_ENV")
+	if envValue == "" {
+		return EnvironmentLocalDev
+	}
 	switch AppEnvironment(envValue) {
 	case EnvironmentLocalDev, EnvironmentDev, EnvironmentStaging, EnvironmentProd, EnvironmentTest:
 		return AppEnvironment(envValue)

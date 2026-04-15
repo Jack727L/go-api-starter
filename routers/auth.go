@@ -1,10 +1,10 @@
 package routers
 
 import (
-	db "github.com/yourusername/go-api-starter/db/sqlc"
-	"github.com/yourusername/go-api-starter/middlewares"
-	services "github.com/yourusername/go-api-starter/services"
-	models "github.com/yourusername/go-api-starter/services/models"
+	db "github.com/Jack727L/go-api-starter/db/sqlc"
+	"github.com/Jack727L/go-api-starter/middlewares"
+	services "github.com/Jack727L/go-api-starter/services"
+	models "github.com/Jack727L/go-api-starter/services/models"
 	"github.com/gofiber/fiber/v2"
 )
 
