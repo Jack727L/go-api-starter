@@ -6,6 +6,10 @@
 *.key
 *.p12
 
+# k8s secrets with real values (keep only the .example variant in git)
+k8s/*secret.yaml
+k8s/*secrets.yaml
+
 # ─── Go build artifacts ───────────────────────────────────────────────────────
 *.exe
 *.exe~
