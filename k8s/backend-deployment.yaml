@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-v1
+  namespace: development
+  labels:
+    app: backend
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      version: v1
+  progressDeadlineSeconds: 120
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: backend
+        version: v1
+    spec:
+      terminationGracePeriodSeconds: 30
+      # Only needed for private registries. Create the secret first, e.g.:
+      #   kubectl create secret docker-registry registry-pull-secret ... -n development
+      imagePullSecrets:
+        - name: registry-pull-secret
+      containers:
+        - name: backend
+          # Replace with your image, e.g.:
+          #   AWS ECR:               <account-id>.dkr.ecr.<region>.amazonaws.com/<repo>:latest
+          #   GCP Artifact Registry: <region>-docker.pkg.dev/<project-id>/<repo>/<image>:latest
+          #   Docker Hub / GHCR:     ghcr.io/<user>/<image>:latest
+          image: YOUR_REGISTRY/YOUR_IMAGE:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          env:
+            - name: BACKEND_ENV
+              value: "prod"
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_PORT
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_DATABASE
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_SSLMODE
+              value: "require"
+            - name: REDIS_HOST
+              value: "redis"
+            - name: REDIS_PORT
+              value: "6379"
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            failureThreshold: 30
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            failureThreshold: 3

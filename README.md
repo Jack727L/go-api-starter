@@ -214,7 +214,7 @@ Uncomment the sample `app` service in `docker-compose.yml` to run the API in Com
 
 ## Deploying on AWS
 
-This template does **not** ship Terraform, CloudFormation, or CDK. Below is how the app’s **environment variables** map to typical AWS managed services and what to wire in your own IaC or console setup.
+This template does **not** ship Terraform, CloudFormation, or CDK. Below is how the app’s **environment variables** map to typical AWS managed services and what to wire in your own IaC or console setup. The same mapping applies to other clouds (GCP: Cloud SQL, Memorystore, GKE) — see [`k8s/README.md`](k8s/README.md) for Kubernetes manifests and a per-cloud table.
 
 ### RDS for PostgreSQL
 
@@ -263,6 +263,7 @@ The app exposes **`GET /healthz`** and **`GET /readyz`** (readiness includes a D
 │   └── sqitch/     # Migrations
 ├── docs/           # Swagger (generated)
 ├── env/            # Env helpers (submodule)
+├── k8s/            # Kubernetes skeleton (see k8s/README.md)
 ├── middlewares/
 ├── routers/
 ├── services/
