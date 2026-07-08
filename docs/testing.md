@@ -53,11 +53,11 @@ The repository includes **`.github/workflows/ci.yml`**, which runs the same defa
 2. Install Go (version from `go.mod`).
 3. Run **`bash ./tools/runTests.sh`** on `ubuntu-latest` (Docker is available on hosted runners).
 
-Triggers: pushes and pull requests to **`main`** and **`master`** (adjust the workflow file if you use other branch names).
+Triggers: pushes and pull requests to **`main`**, **`master`**, and **`development`** (see the workflow file).
 
-### After you fork or rename the module
+### Module path
 
-Replace the placeholder module **`github.com/yourusername/go-api-starter`** in `go.mod`, imports, and `env/go.mod`, then commit — CI uses `go test` inside the script and needs a consistent module path.
+On **`main`**, replace the placeholder module with your fork’s path before CI will match your repo. On **`development`**, the author branch uses **`github.com/Jack727L/go-api-starter`** already.
 
 ### Enabling workflows
 

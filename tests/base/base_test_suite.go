@@ -11,8 +11,8 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/stretchr/testify/suite"
 
-	db "github.com/yourusername/go-api-starter/db/sqlc"
-	"github.com/yourusername/go-api-starter/setup"
+	db "github.com/Jack727L/go-api-starter/db/sqlc"
+	"github.com/Jack727L/go-api-starter/setup"
 )
 
 func init() {

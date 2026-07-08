@@ -1,11 +1,11 @@
 package services
 
 import (
-	"github.com/yourusername/go-api-starter/core"
-	"github.com/yourusername/go-api-starter/core/jobs"
-	db "github.com/yourusername/go-api-starter/db/sqlc"
-	"github.com/yourusername/go-api-starter/middlewares"
-	models "github.com/yourusername/go-api-starter/services/models"
+	"github.com/Jack727L/go-api-starter/core"
+	"github.com/Jack727L/go-api-starter/core/jobs"
+	db "github.com/Jack727L/go-api-starter/db/sqlc"
+	"github.com/Jack727L/go-api-starter/middlewares"
+	models "github.com/Jack727L/go-api-starter/services/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5/pgtype"
 )

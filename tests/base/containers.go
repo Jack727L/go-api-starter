@@ -16,7 +16,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/testcontainers/testcontainers-go/wait"
 
-	db "github.com/yourusername/go-api-starter/db/sqlc"
+	db "github.com/Jack727L/go-api-starter/db/sqlc"
 )
 
 // TestContainers holds references to live containers for a test run.

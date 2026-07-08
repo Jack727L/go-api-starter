@@ -4,8 +4,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yourusername/go-api-starter/core"
-	db "github.com/yourusername/go-api-starter/db/sqlc"
+	"github.com/Jack727L/go-api-starter/core"
+	db "github.com/Jack727L/go-api-starter/db/sqlc"
 	"github.com/gofiber/fiber/v2"
 )
 

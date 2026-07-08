@@ -1,4 +1,4 @@
--- Deploy YOUR_SQITCH_PROJECT:create_user_tokens to pg
+-- Deploy go-api-starter:create_user_tokens to pg
 -- requires: create_users
 
 BEGIN;

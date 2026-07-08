@@ -1,4 +1,4 @@
-module github.com/yourusername/go-api-starter/env
+module github.com/Jack727L/go-api-starter/env
 
 go 1.26.2
 

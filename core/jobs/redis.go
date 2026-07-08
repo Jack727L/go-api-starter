@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/yourusername/go-api-starter/core"
-	"github.com/yourusername/go-api-starter/env"
+	"github.com/Jack727L/go-api-starter/core"
+	"github.com/Jack727L/go-api-starter/env"
 	"github.com/redis/go-redis/v9"
 )
 

@@ -1,6 +1,6 @@
 %syntax-version=1.0.0
-%project=YOUR_SQITCH_PROJECT
-%uri=https://github.com/yourusername/go-api-starter
+%project=go-api-starter
+%uri=https://github.com/Jack727L/go-api-starter
 
-create_users 2024-01-01T00:00:00Z YOUR_NAME <your.email@example.com> # Create users table
-create_user_tokens [create_users] 2024-01-01T00:00:01Z YOUR_NAME <your.email@example.com> # Create user_tokens table
+create_users 2024-01-01T00:00:00Z Jack Li <Jack727L@users.noreply.github.com> # Create users table
+create_user_tokens [create_users] 2024-01-01T00:00:01Z Jack Li <Jack727L@users.noreply.github.com> # Create user_tokens table
